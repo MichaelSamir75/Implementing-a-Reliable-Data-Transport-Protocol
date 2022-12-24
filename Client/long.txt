@@ -1,0 +1,36 @@
+The many recent successes in scaling reinforcement learning (RL) to complex sequential decision-making problems
+were kick-started by the Deep Q-Networks algorithm (DQN;
+Mnih et al. 2013, 2015). Its combination of Q-learning with
+convolutional neural networks and experience replay enabled it to learn, from raw pixels, how to play many Atari
+games at human-level performance. Since then, many extensions have been proposed that enhance its speed or stability.
+Double DQN (DDQN; van Hasselt, Guez, and Silver
+2016) addresses an overestimation bias of Q-learning (van
+Hasselt 2010), by decoupling selection and evaluation of
+the bootstrap action. Prioritized experience replay (Schaul
+et al. 2015) improves data efficiency, by replaying more often transitions from which there is more to learn. The dueling network architecture (Wang et al. 2016) helps to generalize across actions by separately representing state values and action advantages. Learning from multi-step bootstrap targets (Sutton 1988; Sutton and Barto 1998), as used
+in A3C (Mnih et al. 2016), shifts the bias-variance tradeoff and helps to propagate newly observed rewards faster to
+earlier visited states. Distributional Q-learning (Bellemare,
+Dabney, and Munos 2017) learns a categorical distribution
+of discounted returns, instead of estimating the mean. Noisy
+DQN (Fortunato et al. 2017) uses stochastic network layers
+for exploration. This list is, of course, far from exhaustive.
+Each of these algorithms enables substantial performance
+improvements in isolation. Since they address radically different issues, and since they build on a shared framework,
+Copyright c 2018, Association for the Advancement of Artificial
+Intelligence (www.aaai.org). All rights reserved.
+Figure 1: Median human-normalized performance across 57
+Atari games. We compare Rainbow (rainbow-colored) to
+DQN and six published baselines. We match DQN’s best
+performance after 7M frames, surpass any baseline in 44M
+frames, reaching substantially improved final performance.
+Curves are smoothed with a moving average of 5 points.
+they could plausibly be combined. In some cases this has
+been done: Prioritized DDQN and Dueling DDQN both use
+double Q-learning, and Dueling DDQN was also combined
+with prioritized replay. In this paper we propose to study an
+agent that combines all the aforementioned ingredients. We
+show how these different ideas can be integrated, and that
+they are indeed complementary. In fact, their combination
+results in new state-of-the-art results on the benchmark suite
+of 57 Atari 2600 games from the Arcade Learning Environment (Bellemare et al. 2013), both in terms of data efficiency
+and of final performance. Finally, we show results from ablation studies to help understand the contributions of the individual component
