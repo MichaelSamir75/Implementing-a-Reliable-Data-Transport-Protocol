@@ -85,10 +85,10 @@ void send_ack(int client_socket, struct sockaddr_in server_address, int seqNum){
     // send it to the server
     ssize_t bytesSent = sendto(client_socket, ack_buf, MAXIMUM_SEGMENT_SIZE, 0, (struct sockaddr *)&server_address, sizeof(struct sockaddr));
     if (bytesSent == -1) {
-        perror("error in sending the ack ! ");
+        perror("Error in sending the ack!");
         exit(1);
     } else {
-        cout << "Ack for packet seq. Num " << seqNum << " is sent." << endl << flush;
+        cout << "Ack with seq no. " << seqNum << " is sent." << endl << flush;
     }
 }
 
@@ -138,7 +138,7 @@ int main() {
     server_address.sin_addr.s_addr = INADDR_ANY;
     server_address.sin_port = htons(port);
 
-    cout << "File Name is : " << fileName << " The lenght of it : " << fileName.size() << endl << flush;
+    cout << "File Name is : " << fileName << endl << flush;
 
     // function to convert the file content to data packets
     struct packet fileName_packet = createDataPacket(fileName);
@@ -158,7 +158,7 @@ int main() {
     // The recvfrom() function receives data on a socket named by descriptor socket and stores it in a buffer.
     ssize_t Received_bytes = recvfrom(client_socket, rec_buffer, MAXIMUM_SEGMENT_SIZE, 0, (struct sockaddr*)&server_address, &addrlen);
     if (Received_bytes < 0){
-        perror("error in receiving file name ack .");
+        perror("Error in receiving file name ack .");
         exit(1);
     }
     auto* ackPacket = (struct ack_packet*) rec_buffer;
@@ -168,19 +168,16 @@ int main() {
      
     // intialize a boolean array with all false as intially no packets are receive
     bool recieved[numberOfPackets] = {false};
-    // int i = 1;
-    // int expectedSeqNum = 0;
     for( int i=1;i<= numberOfPackets;i++){
         memset(rec_buffer, 0, MAXIMUM_SEGMENT_SIZE);
         // The recvfrom() function receives data on a socket named by descriptor socket and stores it in a buffer.
         ssize_t bytesReceived = recvfrom(client_socket, rec_buffer, MAXIMUM_SEGMENT_SIZE, 0, (struct sockaddr*)&server_address, &addrlen);
         if (bytesReceived == -1){
-            perror("Error receiving data packet.");
+            perror("Error in receiving data packet.");
             break;
         }
         auto* data_packet = (struct packet*) rec_buffer;
-        cout <<"packet number "<<i<<" received" <<endl<<flush;
-        cout << "Sequence Number : " << data_packet->seqno << endl<<flush;
+        cout <<"packet no. "<<i<<" received with seq no. " << data_packet->seqno << endl << flush;
         int len = data_packet->len;
         for (int j = 0 ; j < len ; j++){
             fileContents[data_packet->seqno] += data_packet->data[j];
